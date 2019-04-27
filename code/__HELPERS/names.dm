@@ -159,8 +159,8 @@ var/syndicate_name = null
 
 
 //Traitors and traitor silicons will get these. Revs will not.
-var/syndicate_code_phrase//Code phrase for traitors.
-var/syndicate_code_response//Code response for traitors.
+var/list/syndicate_code_phrase //Code phrase for traitors.
+var/list/syndicate_code_response //Code response for traitors.
 
 	/*
 	Should be expanded.
@@ -178,8 +178,7 @@ var/syndicate_code_response//Code response for traitors.
 
 /proc/generate_code_phrase()//Proc is used for phrase and response in master_controller.dm
 
-
-	var/code_phrase = ""//What is returned when the proc finishes.
+	var/list/code_phrase = list()//What is returned when the proc finishes.
 	var/words = pick(//How many words there will be. Minimum of two. 2, 4 and 5 have a lesser chance of being selected. 3 is the most likely.
 		50; 2,
 		200; 3,
@@ -210,33 +209,27 @@ var/syndicate_code_response//Code response for traitors.
 				switch(rand(1,2))//Mainly to add more options later.
 					if(1)
 						if(names.len&&prob(70))
-							code_phrase += pick(names)
+							code_phrase.Insert(0, pick(names))
 						else
-							code_phrase += pick(pick(first_names_male,first_names_female))
-							code_phrase += " "
-							code_phrase += pick(last_names)
+							code_phrase.Insert(0, pick(pick(first_names_male,first_names_female))+" "+pick(last_names))
 					if(2)
-						code_phrase += pick(get_all_jobs())//Returns a job.
+						code_phrase.Insert(0, pick(get_all_jobs()))
 				safety -= 1
 			if(2)
 				switch(rand(1,2))//Places or things.
 					if(1)
-						code_phrase += pick(drinks)
+						code_phrase.Insert(0, pick(drinks))
 					if(2)
-						code_phrase += pick(locations)
+						code_phrase.Insert(0, pick(locations))
 				safety -= 2
 			if(3)
 				switch(rand(1,3))//Nouns, adjectives, verbs. Can be selected more than once.
 					if(1)
-						code_phrase += pick(nouns)
+						code_phrase.Insert(0, pick(nouns))
 					if(2)
-						code_phrase += pick(adjectives)
+						code_phrase.Insert(0, pick(adjectives))
 					if(3)
-						code_phrase += pick(verbs)
-		if(words==1)
-			code_phrase += "."
-		else
-			code_phrase += ", "
+						code_phrase.Insert(0, pick(verbs))
 
 	return code_phrase
 
